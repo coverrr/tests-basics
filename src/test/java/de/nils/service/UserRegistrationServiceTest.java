@@ -2,20 +2,14 @@ package de.nils.service;
 
 import de.nils.model.User;
 import de.nils.repository.UserRepository;
-import org.assertj.core.api.AbstractStringAssert;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.util.Assert;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserRegistrationServiceTest
 {
@@ -25,7 +19,7 @@ class UserRegistrationServiceTest
     @Mock
     UserRepository userRepository;
 
-    @Spy
+    @Mock
     RegistrationMailService mailService;
 
     @Captor
@@ -38,6 +32,16 @@ class UserRegistrationServiceTest
     }
 
     @Test
+    void wennRegistriere_dannLegeAccountInDBan()
+    {
+        // given -> when
+        userRegistrationService.register("hans", "1234");
+
+        // then
+        verify(userRepository).save(any(User.class));
+    }
+
+    @Test
     void loginNameExistiert_wennRegistriere_dannException()
     {
         // given
@@ -47,16 +51,6 @@ class UserRegistrationServiceTest
         assertThatExceptionOfType(RuntimeException.class)
                 .isThrownBy(() -> userRegistrationService.register("nils", "1234"))
                 .withMessage("Login bereits bekannt");
-    }
-
-    @Test
-    void wennRegistriere_dannLegeAccountInDBan()
-    {
-        // given -> when
-        userRegistrationService.register("hans", "1234");
-
-        // then
-        verify(userRepository).save(any(User.class));
     }
 
     @Test

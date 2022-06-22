@@ -13,6 +13,5 @@ public class RegistrationMailService
     public void sendConfirmationMail(User user)
     {
         log.info("Sending confirmation mail for ...");
-        log.info("Ok now what ... ?");
     }
 }
